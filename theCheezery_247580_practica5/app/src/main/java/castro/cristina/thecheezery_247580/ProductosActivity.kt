@@ -22,14 +22,14 @@ class ProductosActivity : AppCompatActivity() {
     var salties = ArrayList<Product>()
 
    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_productos)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+       super.onCreate(savedInstanceState)
+       enableEdgeToEdge()
+       setContentView(R.layout.activity_productos)
+       ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+           val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+           v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+           insets
+       }
 
        agregarProductos()
 
@@ -38,28 +38,32 @@ class ProductosActivity : AppCompatActivity() {
 
        val categoria = intent.getStringExtra("categoria")
 
-       val productosMostrar = when (categoria) {
+       var productosMostrar = ArrayList<Product>()
+       when (categoria) {
            "coldDrinks" -> {
                tituloListView.setImageResource(R.drawable.colddrinks)
-               coldDrinks
+               productosMostrar = coldDrinks
            }
+
            "hotDrinks" -> {
                tituloListView.setImageResource(R.drawable.hotddrinks)
-               hotDrinks
+               productosMostrar = hotDrinks
            }
+
            "sweets" -> {
                tituloListView.setImageResource(R.drawable.sweets)
-               sweets
+               productosMostrar = sweets
            }
+
            "salties" -> {
                tituloListView.setImageResource(R.drawable.salties)
-               salties
+               productosMostrar = salties
            }
-           else -> ArrayList()
        }
        val adaptador = AdaptadorProductos(this, productosMostrar)
        listView.adapter = adaptador
-    }
+   }
+
 
     private fun agregarProductos() {
         coldDrinks.add(Product("Caramel Frap", R.drawable.caramelfrap, "Caramel syrup meets coffee, milk and ice and whipped cream and buttery caramel sauce layer the love on top.", 5.00))
@@ -95,7 +99,10 @@ class ProductosActivity : AppCompatActivity() {
 
         var contexto: Context? = null
 
-        constructor(contexto: Context, productos:ArrayList<Product>)
+        constructor(contexto: Context, productos:ArrayList<Product>){
+            this.productos = productos
+            this.contexto = contexto
+        }
 
         override fun getCount(): Int {
             return productos.size
